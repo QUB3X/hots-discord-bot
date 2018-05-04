@@ -24,10 +24,13 @@ db.serialize(() => {
 })
 
 function addUser (discordId, hotslogsId, battleTag) {
-  // insert default dreams
-  db.serialize(() => {
-    db.run('INSERT INTO Users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
-  })
+  try {
+    db.serialize(() => {
+      db.run('INSERT INTO Users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
+    })
+  } catch (err) {
+    console.log("Couldnt save to database: " + err)
+  }
 }
 
 bot.on('ready', () => {                                // When the bot is ready
@@ -54,12 +57,17 @@ bot.on('messageCreate', (msg) => {
       
       if(regexId.test(battleTag)) {
       // Ask Hotslogs for the page
-      request(URL + "players/battletag", (err, resp, html) => {
+      request(URL + "players/battletag", (err, resp, data) => {
       // If everything is ok
-      if(!err && resp.statusCode == 200) {
-      }})
+        if(!err && resp.statusCode == 200) {
+          const hotslogsId = JSON.parse(data).id
+          console.log(discordId + " " + battleTag + " " + hotslogsId)
+          //addUser(discordId, battleTag, hotslogsId)
+        }
+      })
       // TODO: check if battletag and hotslogsId are correct (REGEX?)
-      // addUser(discordId, battleTag, hotslogsId)
+      } else {
+        bot.createMessage(msg.channel.id), 'Seems your BattleTag doesn\'t have a match on Hotslogs... maybe region is wrong?'
       }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
