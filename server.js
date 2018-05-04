@@ -16,18 +16,12 @@ const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TO
 const URL = "https://hotslogs-api.glitch.me/api/v1/"
 
 function addUser (discordId, hotslogsId, battleTag) {
-  try {
-    db.serialize(() => {
-      if (!exists) {
-        // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
-        db.run('CREATE TABLE users (discordId INT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
-        console.log('New table Users created!')
-      } else {
-        db.run('INSERT OR REPLACE INTO users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
-      }
-    })
-  } catch (err) {
-    console.log("Couldnt save to database: " + err)
+  if (!exists) {
+    // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
+    db.run('CREATE TABLE users (discord_id INT PRIMARY KEY NOT NULL, hotslogs_id TEXT, battle_tag TEXT)')
+    console.log('New table Users created!')
+  } else {                                                       // COME NOWAH ALSO WHAT IS MARCO DOING
+    db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
   }
 }
 
@@ -64,7 +58,6 @@ bot.on('messageCreate', (msg) => {
           if(!err && resp.statusCode == 200) {
             console.log("Parsing...")
             const hotslogsId = JSON.parse(data).id
-            console.log("Adding to db: " + discordId + " " + battleTag + " " + hotslogsId)
 
             addUser(discordId, battleTag, hotslogsId)
             bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
