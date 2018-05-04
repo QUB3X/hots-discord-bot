@@ -55,25 +55,27 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1]
       const region = msgParts[2]
       
-      const idRegex = new RegExp('*#[0-9]$')
+      // const idRegex = new RegExp('* # [0-9]$')
       const regionRegex = new RegExp('EU|NA|KR|CH')
       
-      if(idRegex.test(battleTag)) {
+      if(true /*idRegex.test(battleTag)*/) {
         if(regionRegex.test(region)) {
           // Ask Hotslogs for the page
-          request(URL + "players/battletag/", (err, resp, data) => {
+          request(URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"), (err, resp, data) => {
           // If everything is ok
+            console.log("Requesting...")
             if(!err && resp.statusCode == 200) {
+              console.log("Parsing...")
               const hotslogsId = JSON.parse(data).id
               console.log(discordId + " " + battleTag + " " + hotslogsId)
               //addUser(discordId, battleTag, hotslogsId)
-            }
+            } else throw err
           })
         } else {
-          bot.createMessage(msg.channel.id), 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CH` are valid!'
+          bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CH` are valid!')
         }
       } else {
-        bot.createMessage(msg.channel.id), 'Seems your BattleTag doesn\'t have a match on Hotslogs... maybe region is wrong?'
+        bot.createMessage(msg.channel.id, 'Seems your BattleTag doesn\'t have a match on Hotslogs... maybe region is wrong?')
       }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
