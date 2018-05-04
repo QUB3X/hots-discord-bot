@@ -12,7 +12,7 @@ const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TO
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
   if (!exists) {
-    db.run('CREATE TABLE Users (discordId TEXT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
+    db.run('CREATE TABLE Users (discordId INT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
     console.log('New table Users created!')
   }
 })
@@ -37,10 +37,15 @@ bot.on('messageCreate', (msg) => {
     // member = local name
     // author = global name
     // https://abal.moe/Eris/docs/User
-    if(msg.content.split(' ')[2]) {
+    if(msg.content.split(' ')[1]) {
+      const discordId = msg.author.id
+      const battleTag = msg.content.split(' ')[1]
+      // TODO: Fetch hotslogs ID
       
+      // TODO: Save the three values to database with
+      //addUser(discordId, battleTag, hotslogsId)
     } else {
-      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```')
+      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```. Make ')
     }
   }
     
