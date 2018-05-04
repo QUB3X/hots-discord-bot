@@ -1,11 +1,15 @@
-const Eris = require('eris');
+// import discord API lib
+const Eris = require('eris')
 
 // init sqlite db
-const fs = require('fs');
-const dbFile = './.data/sqlite.db';
-const exists = fs.existsSync(dbFile);
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(dbFile);
+const fs = require('fs')
+const dbFile = './.data/sqlite.db'
+const exists = fs.existsSync(dbFile)
+const sqlite3 = require('sqlite3').verbose()
+const db = new sqlite3.Database(dbFile)
+
+// add other libs
+const request = require('request')
 
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
@@ -43,13 +47,16 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1]
       const hotslogsId = parseInt(msgParts[2])
       
+      request()
       // TODO: check if battletag and hotslogsId are correct (REGEX?)
       addUser(discordId, battleTag, hotslogsId)
       
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
-        ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```' +
-        '\nMake sure your BattleTag is correct!')
+                        ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234 <Region>```' +
+                        '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CH`' +
+                        '\nMake sure your BattleTag is correct!'
+      )
     }
   }
     

@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "eris": "^0.8.5",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^4.0.0",
+    "request": "^2.85.0"
   },
   "engines": {
     "node": "8.x"
