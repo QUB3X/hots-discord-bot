@@ -12,7 +12,7 @@ const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TO
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
   if (!exists) {
-    db.run('CREATE TABLE Users (discordId TEXT PRIMARY KEY NOT NULL, hotslogsId TEXT NOT NULL, battleTag TEXT NOT NULL)')
+    db.run('CREATE TABLE Users (discordId TEXT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
     console.log('New table Users created!')
   }
 })
@@ -37,12 +37,12 @@ bot.on('messageCreate', (msg) => {
     // member = local name
     // author = global name
     // https://abal.moe/Eris/docs/User
-    bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```')
+    if(msg.content.split(' ')[2]) {
+      
+    } else {
+      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```')
+    }
   }
-  if(msg.content.includes('!battletag')) {
-    const battleTag = msg.content.split(" ")[1]
-  }
-    
     
   /*
   if(msg.content.includes('1337')) {
