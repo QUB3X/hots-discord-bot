@@ -10,26 +10,19 @@ const db = new sqlite3.Database(dbFile);
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
-db.serialize(function(){
+db.serialize(() => {
   if (!exists) {
-    db.run('CREATE TABLE Dreams (dream TEXT)');
-    console.log('New table Dreams created!');
-    
-    // insert default dreams
-    db.serialize(function() {
-      db.run('INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
-    });
-  }
-  else {
-    console.log('Database "Dreams" ready to go!');
-    db.each('SELECT * from Dreams', function(err, row) {
-      if ( row ) {
-        console.log('record:', row);
-      }
-    });
+    db.run('CREATE TABLE Users (discordId TEXT PRIMARY KEY NOT NULL, hotslogsId TEXT NOT NULL, battleTag TEXT NOT NULL)')
+    console.log('New table Users created!')
   }
 })
 
+function addUser () {
+  // insert default dreams
+  db.serialize(() => {
+    db.run('INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
+  })
+}
 
 bot.on('ready', () => {                                // When the bot is ready
     console.log('Ready!');                             // Log "Ready!"
