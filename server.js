@@ -46,6 +46,8 @@ bot.on('messageCreate', (msg) => {
     // member = local name
     // author = global name
     // https://abal.moe/Eris/docs/User
+    bot.sendChannelTyping(msg.channel.id)
+    
     const msgParts = msg.content.split(' ')
     if(msgParts[2]) {
       
@@ -53,25 +55,29 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1]
       const region = msgParts[2]
       
-      const regexId = new RegExp('*#[0-9]$')
+      const idRegex = new RegExp('*#[0-9]$')
+      const regionRegex = new RegExp('EU|NA|KR|CH')
       
-      if(regexId.test(battleTag)) {
-      // Ask Hotslogs for the page
-      request(URL + "players/battletag", (err, resp, data) => {
-      // If everything is ok
-        if(!err && resp.statusCode == 200) {
-          const hotslogsId = JSON.parse(data).id
-          console.log(discordId + " " + battleTag + " " + hotslogsId)
-          //addUser(discordId, battleTag, hotslogsId)
+      if(idRegex.test(battleTag)) {
+        if(regionRegex.test(region)) {
+          // Ask Hotslogs for the page
+          request(URL + "players/battletag/", (err, resp, data) => {
+          // If everything is ok
+            if(!err && resp.statusCode == 200) {
+              const hotslogsId = JSON.parse(data).id
+              console.log(discordId + " " + battleTag + " " + hotslogsId)
+              //addUser(discordId, battleTag, hotslogsId)
+            }
+          })
+        } else {
+          bot.createMessage(msg.channel.id), 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CH` are valid!'
         }
-      })
-      // TODO: check if battletag and hotslogsId are correct (REGEX?)
       } else {
         bot.createMessage(msg.channel.id), 'Seems your BattleTag doesn\'t have a match on Hotslogs... maybe region is wrong?'
       }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
-                        ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234 <Region>```' +
+                        ', tell me your BattleTag with ```!register YourBattleTagHere#1234 <Region>```' +
                         '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CH`' +
                         '\nMake sure your BattleTag is correct!'
       )
