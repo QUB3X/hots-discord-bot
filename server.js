@@ -48,7 +48,7 @@ bot.on('messageCreate', (msg) => {
       const region = msgParts[2]
       
       // const idRegex = new RegExp('* # [0-9]$')
-      const regionRegex = new RegExp('EU|NA|KR|CH')
+      const regionRegex = new RegExp('EU|NA|KR|CN')
       
       if(regionRegex.test(region)) {
         // Ask Hotslogs for the page
@@ -66,12 +66,12 @@ bot.on('messageCreate', (msg) => {
           }
         })
       } else {
-        bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CH` are valid!')
+        bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CN` are valid!')
       }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
                         ', tell me your BattleTag with ```!register YourBattleTagHere#1234 <Region>```' +
-                        '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CH`' +
+                        '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`' +
                         '\nMake sure your BattleTag is correct!'
       )
     }
