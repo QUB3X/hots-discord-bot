@@ -20,7 +20,7 @@ db.serialize(() => {
 function addUser (discordId, hotslogsId, battleTag) {
   // insert default dreams
   db.serialize(() => {
-    db.run(`INSERT INTO Users (discordId, hotslogsId, battleTag) VALUES (${discordId}, ${hotslogsId}, ${battleTag})`);
+    db.run('INSERT INTO Users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
   })
 }
 
@@ -29,9 +29,16 @@ bot.on('ready', () => {                                // When the bot is ready
 });
  
 bot.on('messageCreate', (msg) => {
-  // When a message is created
+  // When a message is created do stuff:
+  
+  // If user want to link his accounts
   if(msg.content.includes('!register')) {
-    msg.createMessage(msg.channel.id, `Ok $(msg.author), what's your BattleTag?`)
+    // Ask user for his account handles
+    // member = local name
+    // author = global name
+    // https://abal.moe/Eris/docs/User
+    bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```')
+    
   }
   if(msg.content.includes('1337')) {
     // If the message content includes "1337"
