@@ -59,7 +59,7 @@ bot.on('messageCreate', (msg) => {
       if(!err && resp.statusCode == 200) {
       }})
       // TODO: check if battletag and hotslogsId are correct (REGEX?)
-      addUser(discordId, battleTag, hotslogsId)
+      // addUser(discordId, battleTag, hotslogsId)
       }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
