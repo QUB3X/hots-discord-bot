@@ -6,9 +6,11 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "eris": "^0.7.2"
+    "eris": "^0.8.5",
+    "sqlite3": "^4.0.0"
   },
   "engines": {
     "node": "8.x"
-  }
+  },
+  "license": "ISC"
 }
