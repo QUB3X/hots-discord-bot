@@ -38,12 +38,21 @@ bot.on('messageCreate', (msg) => {
     // author = global name
     // https://abal.moe/Eris/docs/User
     bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```')
-    
   }
+  if(msg.content.includes('!battletag')) {
+    const battleTag = msg.content.split(" ")[1]
+  }
+    
+    
+  /*
   if(msg.content.includes('1337')) {
     // If the message content includes "1337"
     bot.createMessage(msg.channel.id, 'damn it');
     // Send a message in the same channel with "damn it"
+  }
+  */
+  if(msg.content.includes('!help')) {
+    bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
   }
 });
  
