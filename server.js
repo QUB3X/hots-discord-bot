@@ -37,15 +37,19 @@ bot.on('messageCreate', (msg) => {
     // member = local name
     // author = global name
     // https://abal.moe/Eris/docs/User
-    if(msg.content.split(' ')[1]) {
+    const msgParts = msg.content.split(' ')
+    if(msgParts[2]) {
       const discordId = msg.author.id
-      const battleTag = msg.content.split(' ')[1]
-      // TODO: Fetch hotslogs ID
+      const battleTag = msgParts[1]
+      const hotslogsId = parseInt(msgParts[2])
       
-      // TODO: Save the three values to database with
-      //addUser(discordId, battleTag, hotslogsId)
+      // TODO: check if battletag and hotslogsId are correct
+      addUser(discordId, battleTag, hotslogsId)
+      
     } else {
-      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username + ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```. Make ')
+      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
+        ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234```' +
+        '\nMake sure your BattleTag is correct!')
     }
   }
     
