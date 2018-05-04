@@ -45,23 +45,22 @@ bot.on('messageCreate', (msg) => {
     // https://abal.moe/Eris/docs/User
     const msgParts = msg.content.split(' ')
     if(msgParts[2]) {
+      
       const discordId = msg.author.id
       const battleTag = msgParts[1]
       const region = msgParts[2]
       
-      const regexId = new RegExp('')
+      const regexId = new RegExp('*#[0-9]$')
       
-      if(regexId.test(discordId) && 
-        regexId.test(battleTag)
-      )
+      if(regexId.test(battleTag)) {
       // Ask Hotslogs for the page
       request(URL + "players/battletag", (err, resp, html) => {
       // If everything is ok
       if(!err && resp.statusCode == 200) {
-
+      }})
       // TODO: check if battletag and hotslogsId are correct (REGEX?)
       addUser(discordId, battleTag, hotslogsId)
-      
+      }
     } else {
       bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
                         ', tell me your BattleTag with ```!battletag YourBattleTagHere#1234 <Region>```' +
@@ -81,6 +80,6 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.includes('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
   }
-});
+})
  
 bot.connect();                                         // Get the bot to connect to Discord
