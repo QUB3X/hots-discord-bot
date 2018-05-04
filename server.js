@@ -20,7 +20,7 @@ function addUser (discordId, hotslogsId, battleTag) {
     // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
     db.run('CREATE TABLE users (discord_id INT PRIMARY KEY NOT NULL, hotslogs_id TEXT, battle_tag TEXT)')
     console.log('New table Users created!')
-  } else {                                                       // COME NOWAH ALSO WHAT IS MARCO DOING
+  } else {
     db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
   }
 }
