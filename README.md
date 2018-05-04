@@ -14,7 +14,7 @@ You'll need:
 
 1. Create an App here: [https://discordapp.com/developers/applications/me](https://discordapp.com/developers/applications/me)
 2. Create an App Bot User for your App by clicking "Create a Bot User"
-3. Add the App Bot User to your Discord server using this link: `https://discordapp.com/oauth2/authorize?&client_id=441938351222685706&scope=bot&permissions=0` replacing `<CLIENT_ID>` with the Client ID found on the page of your App
+3. Add the App Bot User to your Discord server using this link: `https://discordapp.com/oauth2/authorize?&client_id=<CLIENT_ID>&scope=bot&permissions=0` replacing `<CLIENT_ID>` with the Client ID found on the page of your App
 4. Set the `DISCORD_BOT_ID` value in `.env` using the Bot User token ("click to reveal" in the App page under the bot username)
 
 ## The code
