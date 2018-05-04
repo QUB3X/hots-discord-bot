@@ -13,6 +13,8 @@ const request = require('request')
 
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
+const URL = "https://hotslogs-api.glitch.me/api/v1/"
+
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
   if (!exists) {
@@ -45,9 +47,18 @@ bot.on('messageCreate', (msg) => {
     if(msgParts[2]) {
       const discordId = msg.author.id
       const battleTag = msgParts[1]
-      const hotslogsId = parseInt(msgParts[2])
+      const region = msgParts[2]
       
-      request()
+      const regexId = new RegExp('')
+      
+      if(regexId.test(discordId) && 
+        regexId.test(battleTag)
+      )
+      // Ask Hotslogs for the page
+      request(URL + "players/battletag", (err, resp, html) => {
+      // If everything is ok
+      if(!err && resp.statusCode == 200) {
+
       // TODO: check if battletag and hotslogsId are correct (REGEX?)
       addUser(discordId, battleTag, hotslogsId)
       
