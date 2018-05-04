@@ -43,7 +43,7 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1]
       const hotslogsId = parseInt(msgParts[2])
       
-      // TODO: check if battletag and hotslogsId are correct
+      // TODO: check if battletag and hotslogsId are correct (REGEX?)
       addUser(discordId, battleTag, hotslogsId)
       
     } else {
