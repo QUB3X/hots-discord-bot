@@ -15,18 +15,16 @@ const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TO
 
 const URL = "https://hotslogs-api.glitch.me/api/v1/"
 
-// if ./.data/sqlite.db does not exist, create it, otherwise print records to console
-function createDb() {
-  if (!exists) {
-    db.run('CREATE TABLE Users (discordId INT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
-    console.log('New table Users created!')
-  }
-}
-
 function addUser (discordId, hotslogsId, battleTag) {
   try {
     db.serialize(() => {
-      db.run('INSERT OR REPLACE INTO Users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
+      if (!exists) {
+        // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
+        db.run('CREATE TABLE users (discordId INT PRIMARY KEY NOT NULL, hotslogsId TEXT, battleTag TEXT)')
+        console.log('New table Users created!')
+      } else {
+        db.run('INSERT OR REPLACE INTO users (discordId, hotslogsId, battleTag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
+      }
     })
   } catch (err) {
     console.log("Couldnt save to database: " + err)
