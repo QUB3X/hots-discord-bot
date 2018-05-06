@@ -39,6 +39,8 @@ bot.on('messageCreate', (msg) => {
     // member = local name
     // author = global name
     // https://abal.moe/Eris/docs/User
+    
+    // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
     
     const msgParts = msg.content.split(' ')
@@ -64,9 +66,6 @@ bot.on('messageCreate', (msg) => {
               db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
             })
             bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
-            db.serialize(() => {
-              getName()
-            })
           } else {
             bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
           }
@@ -85,10 +84,35 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.includes('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
   }
+  
+  if(msg.content.includes('!mmr')) {
+    
+    db.all(`SELECT (discord_id) FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
+      
+    })
+    
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    request(URL + "players/" + hotslogsId, (err, resp, data) => {
+      if(!err && resp.statusCode == 200) {
+        console.log("Parsing...")
+        const hotslogsId = JSON.parse(data).id
+
+        db.serialize(() => {
+          db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
+        })
+        bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
+      } else {
+        bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
+      }
+    })
+  }
 })
  
 
-function getName(){
+
+// UTILITY
+function listAllUsers(){
   var query = "SELECT * FROM users";
   db.all(query, function (err, rows) {
     if(err){
