@@ -36,7 +36,7 @@ bot.on('messageCreate', (msg) => {
   if (msg.author.bot) return
   
   // If user want to link his accounts
-  if(msg.content.includes('!register')) {
+  if(msg.content.startsWith('!register')) {
     // Ask user for his account handles
     // member = local name
     // author = global name
@@ -82,7 +82,7 @@ bot.on('messageCreate', (msg) => {
           bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
         }
       })
-    // If no 3 args
+    // If no 2 args
     } else {
       bot.createMessage(msg.channel.id, 
                         msg.member.username +
@@ -91,11 +91,13 @@ bot.on('messageCreate', (msg) => {
       )
     }
   }
-  if(msg.content.includes('!help')) {
-    bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
+  if(msg.content.startsWith('!help')) {
+    bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
+                                      '!register <BattleTag#1234> <Region>\n' +
+                                      '!mmr')
   }
 
-  if(msg.content.includes('!mmr')) {
+  if(msg.content.startsWith('!mmr')) {
 
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
