@@ -17,15 +17,19 @@ const URL = "https://hotslogs-api.glitch.me/api/v1/"
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
+  db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
             discord_id int PRIMARY KEY,
             hotslogs_id int,
             battle_tag text);`)
   console.log('New table users created!')
+  })
 }
 
 function addUser (discordId, hotslogsId, battleTag) {
+  db.serialize(() => {
   db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
+  })
 }
 
 bot.on('ready', () => {                                // When the bot is ready
@@ -64,6 +68,7 @@ bot.on('messageCreate', (msg) => {
 
             addUser(discordId, battleTag, hotslogsId)
             bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
+            
           } else {
             bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
           }
