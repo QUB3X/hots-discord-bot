@@ -18,10 +18,10 @@ const URL = "https://hotslogs-api.glitch.me/api/v1/"
 function addUser (discordId, hotslogsId, battleTag) {
   if (!exists) {
     // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
-    db.run(`CREATE TABLE users (
-              discord_id int primary key not null,
-              hotslogs_id text,
-              battle_tag text)`)
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+              discord_id int PRIMARY KEY,
+              hotslogs_id int,
+              battle_tag text);`)
     console.log('New table Users created!')
   } else {
     db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
