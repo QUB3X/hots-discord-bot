@@ -52,9 +52,11 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1].replace("#", "_").toLowerCase()
       const region = msgParts[2].toUpperCase()
 
-      // const idRegex = new RegExp('^*{3,12}/#/[0-9]{4,5}$')
-      const regionRegex = new RegExp('EU|NA|KR|CN')
-      console.log(">"+region+"<")
+      const battletagRegex = new RegExp('^[A-zÀ-ú][A-zÀ-ú0-9]{2,11}#[0-9]{4,5}$')  // https://eu.battle.net/support/en/article/26963
+      const regionRegex    = new RegExp('EU|NA|KR|CN')
+      
+      if(battletagRegex.test(battleTag))
+      
       if(region && regionRegex.test(region)) {
         // Ask Hotslogs for the page
         request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
