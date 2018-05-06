@@ -33,7 +33,7 @@ if (!exists) {
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
   // dont reply to other bots
-  if (msg.author.bot) return;
+  if (msg.author.bot) return
   
   // If user want to link his accounts
   if(msg.content.includes('!register')) {
@@ -52,36 +52,41 @@ bot.on('messageCreate', (msg) => {
       const battleTag = msgParts[1].replace("#", "_").toLowerCase()
       const region = msgParts[2].toUpperCase()
 
-      const battletagRegex = new RegExp('^[A-zÀ-ú][A-zÀ-ú0-9]{2,11}#[0-9]{4,5}$')  // https://eu.battle.net/support/en/article/26963
+      const battletagRegex = new RegExp('^[A-zÀ-ú][A-zÀ-ú0-9]{2,11}_[0-9]{4,5}$')  // https://eu.battle.net/support/en/article/26963
       const regionRegex    = new RegExp('EU|NA|KR|CN')
       
-      if(battletagRegex.test(battleTag))
-      
-      if(region && regionRegex.test(region)) {
-        // Ask Hotslogs for the page
-        request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
-        // If everything is ok
-          //console.log("Requesting: " + URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"))
-          if(!err && resp.statusCode == 200) {
-            console.log("Parsing...")
-            const hotslogsId = JSON.parse(data).id
-
-            db.serialize(() => {
-              db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
-            })
-            bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
-          } else {
-            bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
-          }
-        })
-      } else {
-        bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CN` are valid!')
+      if(!battletagRegex.test(battleTag)){
+        bot.createMessage(msg.channel.id, 'Please enter a valid BattleTag!')
+        return
       }
+      
+      if(!regionRegex.test(region)){
+        bot.createMessage(msg.channel.id, 'Please enter a valid region: `EU`, `NA`, `KR`, `CN`')
+        return
+      }
+      
+      // Ask Hotslogs for the page
+      request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
+      // If everything is ok
+        //console.log("Requesting: " + URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"))
+        if(!err && resp.statusCode == 200) {
+          console.log("Parsing...")
+          const hotslogsId = JSON.parse(data).id
+
+          db.serialize(() => {
+            db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
+          })
+          bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
+        } else {
+          bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
+        }
+      })
+    // If no 3 args
     } else {
-      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
-                        ', tell me your BattleTag with ```!register YourBattleTagHere#1234 <Region>```' +
-                        '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`' +
-                        '\nMake sure your BattleTag is correct!'
+      bot.createMessage(msg.channel.id, 
+                        msg.member.username +
+                        ', to register please tell me your BattleTag and region with ```!register YourBattleTagHere#1234 <Region>```\n' +
+                        'Replace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`'
       )
     }
   }
