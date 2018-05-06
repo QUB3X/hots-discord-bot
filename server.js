@@ -49,10 +49,10 @@ bot.on('messageCreate', (msg) => {
     if(msgParts.length == 3) {
 
       const discordId = msg.author.id
-      const battleTag = msgParts[1].replace("#", "_").toLowerCase()
-      const region = msgParts[2].toUpperCase()
+      let battleTag = msgParts[1]
+      let region = msgParts[2].toUpperCase()
 
-      const battletagRegex = new RegExp('^[A-zÀ-ú][A-zÀ-ú0-9]{2,11}_[0-9]{4,5}$')  // https://eu.battle.net/support/en/article/26963
+      const battletagRegex = new RegExp('^[A-zÀ-ú][A-zÀ-ú0-9]{2,11}#[0-9]{4,5}$')  // https://eu.battle.net/support/en/article/26963
       const regionRegex    = new RegExp('EU|NA|KR|CN')
       
       if(!battletagRegex.test(battleTag)){
@@ -66,6 +66,7 @@ bot.on('messageCreate', (msg) => {
       }
       
       // Ask Hotslogs for the page
+      battleTag = battleTag.replace("#", "_")
       request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
       // If everything is ok
         //console.log("Requesting: " + URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"))
