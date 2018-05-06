@@ -98,8 +98,15 @@ bot.on('messageCreate', (msg) => {
     })
   }
 })
- 
 
+/*
+  - Winr
+*/
+
+
+////////////////////////////////////////////////////////////
+// UTILITY /////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 function fetchPlayerData(msg, callback) {
   db.all(`SELECT hotslogs_id id, discord_id discord FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
     if(err) {
@@ -123,7 +130,6 @@ function fetchPlayerData(msg, callback) {
   })
 }
 
-// UTILITY
 function listAllUsers(){
   var query = "SELECT * FROM users";
   db.all(query, (err, rows) => {
