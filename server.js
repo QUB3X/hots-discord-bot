@@ -3,7 +3,7 @@ const Eris = require('eris')
 
 // init sqlite db
 const fs = require('fs')
-const dbFile = './.data/sqlite.db'
+const dbFile = '.data/sqlite.db'
 const exists = fs.existsSync(dbFile)
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database(dbFile)
@@ -15,17 +15,17 @@ const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TO
 
 const URL = "https://hotslogs-api.glitch.me/api/v1/"
 
+if (!exists) {
+  // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+            discord_id int PRIMARY KEY,
+            hotslogs_id int,
+            battle_tag text);`)
+  console.log('New table users created!')
+}
+
 function addUser (discordId, hotslogsId, battleTag) {
-  if (!exists) {
-    // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-              discord_id int PRIMARY KEY,
-              hotslogs_id int,
-              battle_tag text);`)
-    console.log('New table Users created!')
-  } else {
-    db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
-  }
+  db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
 }
 
 bot.on('ready', () => {                                // When the bot is ready
@@ -79,17 +79,23 @@ bot.on('messageCreate', (msg) => {
       )
     }
   }
-    
-  /*
-  if(msg.content.includes('1337')) {
-    // If the message content includes "1337"
-    bot.createMessage(msg.channel.id, 'damn it');
-    // Send a message in the same channel with "damn it"
-  }
-  */
   if(msg.content.includes('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
   }
 })
  
+
+function getName(){
+  var query = "SELECT * FROM users";
+  db.all(query, function (err, rows) {
+    if(err){
+        console.log(err);
+    }else{
+      console.log(rows[0].hotslogs_id)
+      console.log(rows[0].discord_id)
+      console.log(rows[0].battle_tag)
+    }
+  })
+}
+
 bot.connect();                                         // Get the bot to connect to Discord
