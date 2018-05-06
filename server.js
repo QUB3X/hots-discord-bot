@@ -90,11 +90,11 @@ bot.on('messageCreate', (msg) => {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
     fetchPlayerData(msg, (player) => {
-      bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:" +
-            "```**Team League**\n " + player.teamLeague + "\n" +
-               "**Hero League**\n " + player.heroLeague + "\n" +
-               "**Quick Match**\n " + player.quickMatch + "\n" +
-               "**Unranked Draft**\n " + player.unrankedDraft + "\n```")
+      bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:\n" +
+            "**Team League**\n " + player.teamLeague + "\n" +
+            "**Hero League**\n " + player.heroLeague + "\n" +
+            "**Quick Match**\n " + player.quickMatch + "\n" +
+            "**Unranked Draft**\n " + player.unrankedDraft + "\n")
     })
   }
 })
@@ -125,12 +125,39 @@ function fetchPlayerData(msg, callback) {
           const player = JSON.parse(data)
           
           callback(player)
-          
         } else {
           console.log(err)
           bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
         }
       })
+    }
+  })
+}
+
+function fetchHeroData(msg, heroName, callback) {
+
+  request(URL + "heroes/" + heroName, (err, resp, data) => {
+    if(!err && resp.statusCode == 200) {
+      const hero = JSON.parse(data)
+
+      callback(hero)
+    } else {
+      console.log(err)
+      bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
+    }
+  })
+}
+
+function fetchWinrates(msg, callback) {
+
+  request(URL + "heroes", (err, resp, data) => {
+    if(!err && resp.statusCode == 200) {
+      const hero = JSON.parse(data)
+
+      callback(hero)
+    } else {
+      console.log(err)
+      bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
     }
   })
 }
