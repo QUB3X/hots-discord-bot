@@ -86,22 +86,27 @@ bot.on('messageCreate', (msg) => {
   }
   
   if(msg.content.includes('!mmr')) {
+    var hotslogsId
     
-    db.all(`SELECT (discord_id) FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
-      
+    db.all(`SELECT (discord_id, hotslogs_id) FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
+      if(err) {
+        console.log(err)
+      } else {
+        hotslogsId = rows[0].hotslogs_id
+      }
     })
     
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
     request(URL + "players/" + hotslogsId, (err, resp, data) => {
       if(!err && resp.statusCode == 200) {
-        console.log("Parsing...")
-        const hotslogsId = JSON.parse(data).id
+        const player = JSON.parse(data)
 
-        db.serialize(() => {
-          db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
-        })
-        bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
+        bot.createMessage(msg.channel.id, "Hi " + msg.member.username) + ", here's your MMR:" +
+          "```Team League          " + player.teamLeague + "\n" +
+             "Hero League          " + player.heroLeague + "\n" +
+             "Quick Match          " + player.quickMatch + "\n" +
+             "Unranked Draft       " + player.unrankedDraft + "\n```"
       } else {
         bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
       }
@@ -114,9 +119,9 @@ bot.on('messageCreate', (msg) => {
 // UTILITY
 function listAllUsers(){
   var query = "SELECT * FROM users";
-  db.all(query, function (err, rows) {
+  db.all(query, (err, rows) => {
     if(err){
-        console.log(err);
+        console.log(err)
     }else{
       for(let row of rows) {
         console.log(row.discord_id + " " + row.hotslogs_id + " "+ row.battle_tag)
