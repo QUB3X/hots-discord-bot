@@ -46,7 +46,7 @@ bot.on('messageCreate', (msg) => {
       
       const discordId = msg.author.id
       const battleTag = msgParts[1].replace("#", "_").toLowerCase()
-      const region = msgParts[2]
+      const region = msgParts[2].toUpperCase()
       
       // const idRegex = new RegExp('* # [0-9]$')
       const regionRegex = new RegExp('EU|NA|KR|CN')
@@ -61,7 +61,7 @@ bot.on('messageCreate', (msg) => {
             const hotslogsId = JSON.parse(data).id
 
             db.serialize(() => {
-              db.run(`INSERT INTO users (discord_id, hotslogs_id, battle_tag) VALUES(?,?,?);`, discordId, hotslogsId, battleTag)
+              db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
             })
             bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
             db.serialize(() => {
@@ -94,9 +94,9 @@ function getName(){
     if(err){
         console.log(err);
     }else{
-      console.log(rows[0].hotslogs_id)
-      console.log(rows[0].discord_id)
-      console.log(rows[0].battle_tag)
+      for(let row of rows) {
+        console.log(row.discord_id + " " + row.hotslogs_id + " "+ row.battle_tag)
+      }
     }
   })
 }
