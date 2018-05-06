@@ -86,29 +86,29 @@ bot.on('messageCreate', (msg) => {
   }
   
   if(msg.content.includes('!mmr')) {
-    var hotslogsId
-    
-    db.all(`SELECT (discord_id, hotslogs_id) FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
-      if(err) {
-        console.log(err)
-      } else {
-        hotslogsId = rows[0].hotslogs_id
-      }
-    })
     
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
-    request(URL + "players/" + hotslogsId, (err, resp, data) => {
-      if(!err && resp.statusCode == 200) {
-        const player = JSON.parse(data)
-
-        bot.createMessage(msg.channel.id, "Hi " + msg.member.username) + ", here's your MMR:" +
-          "```Team League          " + player.teamLeague + "\n" +
-             "Hero League          " + player.heroLeague + "\n" +
-             "Quick Match          " + player.quickMatch + "\n" +
-             "Unranked Draft       " + player.unrankedDraft + "\n```"
-      } else {
+    db.all(`SELECT hotslogs_id id, discord_id discord FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
+      if(err) {
+        console.log(err)
         bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
+      } else {
+        const hotslogsId = rows[0].id
+        
+        request(URL + "players/" + hotslogsId, (err, resp, data) => {
+          if(!err && resp.statusCode == 200) {
+            const player = JSON.parse(data)
+            
+            bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:" +
+              "```🔷 Team League          " + player.teamLeague + "\n" +
+                 "Hero League          " + player.heroLeague + "\n" +
+                 "Quick Match          " + player.quickMatch + "\n" +
+                 "Unranked Draft       " + player.unrankedDraft + "\n```")
+          } else {
+            bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
+          }
+        })
       }
     })
   }
