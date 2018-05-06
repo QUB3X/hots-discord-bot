@@ -100,7 +100,12 @@ bot.on('messageCreate', (msg) => {
 })
 
 /*
-  - Winr
+  - Winrate
+  - Time played
+  - Best winrate on maps
+  - Top 3 heroes by winrate
+  - Last 3 heroes by winrate
+  - Is last hero op?
 */
 
 
