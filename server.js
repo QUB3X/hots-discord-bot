@@ -26,12 +26,6 @@ if (!exists) {
   })
 }
 
-function addUser (discordId, hotslogsId, battleTag) {
-  db.serialize(() => {
-  db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (' + discordId + ',' + hotslogsId + ',' + battleTag + ');')
-  })
-}
-
 bot.on('ready', () => {                                // When the bot is ready
     console.log('Ready!');                             // Log "Ready!"
 });
@@ -51,7 +45,7 @@ bot.on('messageCreate', (msg) => {
     if(msgParts[2]) {
       
       const discordId = msg.author.id
-      const battleTag = msgParts[1].replace("#", "_")
+      const battleTag = msgParts[1].replace("#", "_").toLowerCase()
       const region = msgParts[2]
       
       // const idRegex = new RegExp('* # [0-9]$')
@@ -66,9 +60,13 @@ bot.on('messageCreate', (msg) => {
             console.log("Parsing...")
             const hotslogsId = JSON.parse(data).id
 
-            addUser(discordId, battleTag, hotslogsId)
+            db.serialize(() => {
+              db.run(`INSERT INTO users (discord_id, hotslogs_id, battle_tag) VALUES(?,?,?);`, discordId, hotslogsId, battleTag)
+            })
             bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
-            
+            db.serialize(() => {
+              getName()
+            })
           } else {
             bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
           }
