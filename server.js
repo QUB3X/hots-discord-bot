@@ -91,10 +91,10 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:" +
-            "```Team League          " + player.teamLeague + "\n" +
-               "Hero League          " + player.heroLeague + "\n" +
-               "Quick Match          " + player.quickMatch + "\n" +
-               "Unranked Draft       " + player.unrankedDraft + "\n```")
+            "```**Team League**\n " + player.teamLeague + "\n" +
+               "**Hero League**\n " + player.heroLeague + "\n" +
+               "**Quick Match**\n " + player.quickMatch + "\n" +
+               "**Unranked Draft**\n " + player.unrankedDraft + "\n```")
     })
   }
 })
