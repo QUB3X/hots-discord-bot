@@ -26,76 +26,80 @@ if (!exists) {
   })
 }
 
-bot.on('ready', () => {                                // When the bot is ready
-    console.log('Ready!');                             // Log "Ready!"
-});
- 
-bot.on('messageCreate', (msg) => {
-  // When a message is created do stuff:
-  
-  // If user want to link his accounts
-  if(msg.content.includes('!register')) {
-    // Ask user for his account handles
-    // member = local name
-    // author = global name
-    // https://abal.moe/Eris/docs/User
-    
-    // Simulate bot typing
-    bot.sendChannelTyping(msg.channel.id)
-    
-    const msgParts = msg.content.split(' ')
-    if(msgParts[2]) {
-      
-      const discordId = msg.author.id
-      const battleTag = msgParts[1].replace("#", "_").toLowerCase()
-      const region = msgParts[2].toUpperCase()
-      
-      // const idRegex = new RegExp('* # [0-9]$')
-      const regionRegex = new RegExp('EU|NA|KR|CN')
-      
-      if(regionRegex.test(region)) {
-        // Ask Hotslogs for the page
-        request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
-        // If everything is ok
-          //console.log("Requesting: " + URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"))
-          if(!err && resp.statusCode == 200) {
-            console.log("Parsing...")
-            const hotslogsId = JSON.parse(data).id
+// bot.on('ready', () => {                                // When the bot is ready
+//     console.log('Ready!');                             // Log "Ready!"
+// })
 
-            db.serialize(() => {
-              db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
-            })
-            bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
-          } else {
-            bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
-          }
-        })
-      } else {
-        bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CN` are valid!')
-      }
-    } else {
-      bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
-                        ', tell me your BattleTag with ```!register YourBattleTagHere#1234 <Region>```' +
-                        '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`' +
-                        '\nMake sure your BattleTag is correct!'
-      )
-    }
-  }
-  if(msg.content.includes('!help')) {
-    bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
-  }
+// When a message is created do stuff:
+bot.on('messageCreate', (msg) => {
   
-  if(msg.content.includes('!mmr')) {
-    
-    // Simulate bot typing
-    bot.sendChannelTyping(msg.channel.id)
-    fetchPlayerData(msg, (player) => {
-      bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:\n" +
-            "**Team League**\n " + player.teamLeague + "\n" +
-            "**Hero League**\n " + player.heroLeague + "\n" +
-            "**Quick Match**\n " + player.quickMatch + "\n" +
-            "**Unranked Draft**\n " + player.unrankedDraft + "\n")
-    })
+  
+  // dont reply to other bots
+  if(!msg.author.bot) {
+    // If user want to link his accounts
+    if(msg.content.includes('!register')) {
+      // Ask user for his account handles
+      // member = local name
+      // author = global name
+      // https://abal.moe/Eris/docs/User
+
+      // Simulate bot typing
+      bot.sendChannelTyping(msg.channel.id)
+
+      const msgParts = msg.content.split(' ')
+      if(msgParts[2]) {
+
+        const discordId = msg.author.id
+        const battleTag = msgParts[1].replace("#", "_").toLowerCase()
+        const region = msgParts[2].toUpperCase()
+
+        // const idRegex = new RegExp('* # [0-9]$')
+        const regionRegex = new RegExp('EU|NA|KR|CN')
+        console.log(">"+region+"<")
+        if(region && regionRegex.test(region)) {
+          // Ask Hotslogs for the page
+          request(URL + "players/battletag/" + region + "/" + battleTag, (err, resp, data) => {
+          // If everything is ok
+            //console.log("Requesting: " + URL + "players/battletag/" + region + "/" + battleTag.replace("#", "_"))
+            if(!err && resp.statusCode == 200) {
+              console.log("Parsing...")
+              const hotslogsId = JSON.parse(data).id
+
+              db.serialize(() => {
+                db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
+              })
+              bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
+            } else {
+              bot.createMessage(msg.channel.id, 'Sorry, but I can\'t find your profile 😢')
+            }
+          })
+        } else {
+          bot.createMessage(msg.channel.id, 'Seems your entered a wrong region code! Only `EU`, `NA`, `KR`, `CN` are valid!')
+        }
+      } else {
+        bot.createMessage(msg.channel.id, 'Ok ' + msg.member.username +
+                          ', tell me your BattleTag with ```!register YourBattleTagHere#1234 <Region>```' +
+                          '\nReplace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`' +
+                          '\nMake sure your BattleTag is correct!'
+        )
+      }
+    }
+    if(msg.content.includes('!help')) {
+      bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands: none KEK')
+    }
+
+    if(msg.content.includes('!mmr')) {
+
+      // Simulate bot typing
+      bot.sendChannelTyping(msg.channel.id)
+      fetchPlayerData(msg, (player) => {
+        bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:\n" +
+              "**Team League**\n " + player.teamLeague + "\n" +
+              "**Hero League**\n " + player.heroLeague + "\n" +
+              "**Quick Match**\n " + player.quickMatch + "\n" +
+              "**Unranked Draft**\n " + player.unrankedDraft + "\n")
+      })
+    }
   }
 })
 
