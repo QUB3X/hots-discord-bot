@@ -118,24 +118,41 @@ bot.on('messageCreate', (msg) => {
     
     fetchPlayerData(msg, (player) => {
       player.winrate += (player.winrate > 50) ? " 😄" : " 😦"
-      bot.createMessage(msg.channel.id, `Hi ${msg.member.username}, your winrate is ${player.winrate}!`)
+      bot.createMessage(msg.channel.id, `${msg.member.username}, your winrate is ${player.winrate}!`)
     })
   } // winrate
   
-  if(msg.content.startsWith('!winrate')) {
+  if(msg.content.startsWith('!timeplayed')) {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
     
     fetchPlayerData(msg, (player) => {
-      player.winrate += (player.winrate > 50) ? " 😄" : " 😦"
-      bot.createMessage(msg.channel.id, `Hi ${msg.member.username}, your winrate is ${player.winrate}!`)
+      bot.createMessage(msg.channel.id, `${msg.member.username}, you played for ${player.timePlayed}!`)
     })
   } // time played
+  
+  if(msg.content.startsWith('!mvp')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchPlayerData(msg, (player) => {
+      bot.createMessage(msg.channel.id, `${msg.member.username}, you've been MVP in the ${player.MVPrate}% of your games!`)
+    })
+  } // mvp
+  
+  if(msg.content.startsWith('!gamesplayed')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchPlayerData(msg, (player) => {
+      bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
+    })
+  } // games played
 }) // end of commands
 
 /*
-  - Winrate
-  - Time played
+  - √Winrate
+  - √Time played
   - Best winrate on maps
   - Top 3 heroes by winrate
   - Last 3 heroes by winrate
