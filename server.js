@@ -148,6 +148,18 @@ bot.on('messageCreate', (msg) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
     })
   } // games played
+  if(msg.content.startsWith('!mytopheroes')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchPlayerData(msg, (player) => {
+      const heroes = player.heroes // array
+      heroes.sort((a,b) => {return a.winrate - b.winrate})
+      
+      
+      bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
+    })
+  } // games played
 }) // end of commands
 
 /*
