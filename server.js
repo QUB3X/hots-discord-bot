@@ -90,26 +90,42 @@ bot.on('messageCreate', (msg) => {
                         'Replace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`'
       )
     }
-  }
+  } // register
+  
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
-                                      '!register <BattleTag#1234> <Region>\n' +
-                                      '!mmr')
-  }
+                                      '`!register <BattleTag#1234> <Region>`\n' +
+                                      '`!mmr`')
+  } // help
 
   if(msg.content.startsWith('!mmr')) {
 
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
     fetchPlayerData(msg, (player) => {
-      bot.createMessage(msg.channel.id, "Hi " + msg.member.username + ", here's your MMR:\n" +
-            "**Team League**:  " + player.teamLeague + "\n" +
-            "**Hero League**:  " + player.heroLeague + "\n" +
-            "**Quick Match**:  " + player.quickMatch + "\n" +
-            "**Unranked Draft**:  " + player.unrankedDraft + "\n")
+      bot.createMessage(msg.channel.id, 
+            ```Hi ${msg.member.username}, here's your MMR:\n
+            **Team League**:  ${player.teamLeague}\n" +
+            **Hero League**:  ${player.heroLeague}\n" +
+            **Quick Match**:  ${player.quickMatch}\n" +
+            **Unranked Draft**:  ${player.unrankedDraft}```)
+    })
+  } // mmr
+  
+  if(msg.content.startsWith('!winrate')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchPlayerData(msg, (player) => {
+      bot.createMessage(msg.channel.id, 
+            ```Hi ${msg.member.username}, here's your winrate:\n
+            **Team League**:  ${player.teamLeague}\n" +
+            **Hero League**:  ${player.heroLeague}\n" +
+            **Quick Match**:  ${player.quickMatch}\n" +
+            **Unranked Draft**:  ${player.unrankedDraft}```)
     })
   }
-})
+}) // end of commands
 
 /*
   - Winrate
