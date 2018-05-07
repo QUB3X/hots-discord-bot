@@ -154,10 +154,18 @@ bot.on('messageCreate', (msg) => {
     
     fetchPlayerData(msg, (player) => {
       const heroes = player.heroes // array
+      const arg = msg.content.split(" ")
+      const howManyHeroes = (arg[1]) ? arg[1] : 3
+      var output;
+      
       heroes.sort((a,b) => {return a.winrate - b.winrate})
       
+      for (var i = 0; i < howManyHeroes; i++) {
+        let hero = heroes[i]
+        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games)\n`
+      }
       
-      bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
+      bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by winrate:\n${output}`)
     })
   } // games played
 }) // end of commands
