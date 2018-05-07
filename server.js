@@ -95,7 +95,7 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
                                       '`!register <BattleTag#1234> <Region>`\n' +
-                                      '`!mmr`\n!winrate\n!timeplayed\n!mytopheroes')
+                                      '`!mmr`\n!winrate\n!timeplayed\n!mytopheroes <Quantity>\n!mymains <Quantity>')
   } // help
 
   if(msg.content.startsWith('!mmr')) {
@@ -158,7 +158,7 @@ bot.on('messageCreate', (msg) => {
       const howManyHeroes = (arg[1]) ? arg[1] : 3
       var output = "";
       
-      heroes.sort((a,b) => {return a.winrate - b.winrate})
+      // PLS MAKE A SORT HALP !!!!! .sort() DOENST WORK ARGHHHH
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
@@ -168,16 +168,28 @@ bot.on('messageCreate', (msg) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by winrate:\n${output}`)
     })
   } // games played
+  if(msg.content.startsWith('!mymains')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchPlayerData(msg, (player) => {
+      const heroes = player.heroes // array
+      const arg = msg.content.split(" ")
+      const howManyHeroes = (arg[1]) ? arg[1] : 3
+      var output = "";
+      
+      // heroes are already sorted by winrate
+      //heroes.sort((a,b) => {return a.winrate - b.winrate})
+      
+      for (var i = 0; i < howManyHeroes; i++) {
+        let hero = heroes[i]
+        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games)\n`
+      }
+      
+      bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by games played:\n${output}`)
+    })
+  } // player's mains
 }) // end of commands
-
-/*
-  - √Winrate
-  - √Time played
-  - Best winrate on maps
-  - Top 3 heroes by winrate
-  - Last 3 heroes by winrate
-  - Is last hero op?
-*/
 
 
 ////////////////////////////////////////////////////////////
