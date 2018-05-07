@@ -95,7 +95,7 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
                                       '`!register <BattleTag#1234> <Region>`\n' +
-                                      '`!mmr`')
+                                      '`!mmr`\n!winrate\n!timeplayed\n!mytopheroes')
   } // help
 
   if(msg.content.startsWith('!mmr')) {
@@ -104,11 +104,11 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, 
-            ```Hi ${msg.member.username}, here's your MMR:\n
-            **Team League**:  ${player.teamLeague}\n
-            **Hero League**:  ${player.heroLeague}\n
-            **Quick Match**:  ${player.quickMatch}\n
-            **Unranked Draft**:  ${player.unrankedDraft}```)
+            `Hi ${msg.member.username}, here's your MMR:\n
+**Team League**:  ${player.teamLeague}\n
+**Hero League**:  ${player.heroLeague}\n
+**Quick Match**:  ${player.quickMatch}\n
+**Unranked Draft**:  ${player.unrankedDraft}`)
     })
   } // mmr
   
@@ -117,7 +117,7 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     
     fetchPlayerData(msg, (player) => {
-      player.winrate += (player.winrate > 50) ? " 😄" : " 😦"
+      player.winrate += (player.winrate > 50) ? "% 😄" : "% 😦"
       bot.createMessage(msg.channel.id, `${msg.member.username}, your winrate is ${player.winrate}!`)
     })
   } // winrate
@@ -156,7 +156,7 @@ bot.on('messageCreate', (msg) => {
       const heroes = player.heroes // array
       const arg = msg.content.split(" ")
       const howManyHeroes = (arg[1]) ? arg[1] : 3
-      var output;
+      var output = "";
       
       heroes.sort((a,b) => {return a.winrate - b.winrate})
       
