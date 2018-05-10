@@ -13,7 +13,7 @@ const request = require('request')
 
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
-const URL = "https://hotslogs-api.glitch.me/api/v1/"
+const URL = process.env.API_URL
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
@@ -95,7 +95,7 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
                                       '`!register <BattleTag#1234> <Region>`\n' +
-                                      '`!mmr`\n!winrate\n!timeplayed\n!mytopheroes <Quantity>\n!mymains <Quantity>')
+                                      '`!mmr`\n`!winrate`\n`!timeplayed`\n`!mytopheroes <Quantity>`\n`!mymains <Quantity>`')
   } // help
 
   if(msg.content.startsWith('!mmr')) {
@@ -183,7 +183,7 @@ bot.on('messageCreate', (msg) => {
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
-        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games)\n`
+        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games\n`
       }
       
       bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by games played:\n${output}`)

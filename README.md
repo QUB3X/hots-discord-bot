@@ -1,6 +1,6 @@
 # Heroes of the Storm Discord Bot
 
-A bot that provides infos and stats about the players, from HotsLogs.
+A bot that provides infos and stats about the players.
 
 ## The code
 
