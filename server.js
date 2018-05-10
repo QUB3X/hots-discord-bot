@@ -105,7 +105,7 @@ bot.on('messageCreate', (msg) => {
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
                                       '`!register <BattleTag#1234> <Region>`\n' +
-                                      '`!mmr`\n`!winrate`\n`!timeplayed`\n`!mytopheroes <Quantity>`\n`!mymains <Quantity>`')
+                                      '`!mmr`\n`!winrate`\n`!timeplayed`\n`!mytopheroes <Quantity | Max 20>`\n`!mymains <Quantity | Max 20>`')
   } // help
 
   if(msg.content.startsWith('!mmr')) {
@@ -170,22 +170,22 @@ bot.on('messageCreate', (msg) => {
     fetchPlayerData(msg, (player) => {
       const heroes = player.heroes // array
       const arg = msg.content.split(" ")
-      const howManyHeroes = (arg[1]) ? arg[1] : 3
+      const howManyHeroes = (arg[1] && arg[1] <= 20) ? arg[1] : 3 // Max 20, else 3
       var output = "";
       //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
       heroes.sort((a, b) => {
-        let a_wr = parseFloat(a.winrate)
-        let a_gp = parseFloat(a.gamesPlayed)
-        let b_wr = parseFloat(b.winrate)
-        let b_gp = parseFloat(b.gamesPlayed)
         
-        let a = a_wr*a_gp
-        let b = b_wr*b_gp
-        console.log(a + "   " + b)
+        let _a = parseFloat(a.winrate)*parseFloat(a.gamesPlayed)
+        let _b = parseFloat(b.winrate)*parseFloat(b.gamesPlayed)
         
-        if(a > b_wr*b_gp)
+        if(isNaN(_a)) _a = 0
+        if(isNaN(_b)) _b = 0
+        
+        //console.log(_a + "   " + _b)
+        
+        if(_a > _b)
           return -1
-        else(a_wr*a_gp < b_wr*b_gp)
+        else(_a < _b)
           return 1
         return 0
       })
@@ -216,16 +216,24 @@ bot.on('messageCreate', (msg) => {
     fetchPlayerData(msg, (player) => {
       const heroes = player.heroes // array
       const arg = msg.content.split(" ")
-      const howManyHeroes = (arg[1]) ? arg[1] : 3
+      const howManyHeroes = (arg[1] && arg[1] <= 20) ? arg[1] : 3 // Max 20, else 3
       var output = "";
-      
-      // heroes are already sorted by winrate
-      //heroes.sort((a,b) => {return a.winrate - b.winrate})
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
-        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games\n`
+        output += `(${i+1}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
       }
+      
+      const embed = {embed: {
+          color: 3447003,
+          url: "https://hots-discord-bot.glitch.me/",
+          fields: [{
+              name: msg.member.username + "'s Top Heroes",
+              value: "`" + output + "`",
+          }]
+        }
+      }
+      
       
       bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by games played:\n${output}`)
     })
