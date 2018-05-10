@@ -41,7 +41,10 @@ if (!exists) {
 
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
-    
+  
+  // LMAO doesnt workk 🔔😜
+  //msg = sanitize.primitives(msg)
+  
   // dont reply to other bots
   if (msg.author.bot) return
   
@@ -114,14 +117,26 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, 
-            `Hi ${msg.member.username}, here's your MMR:\n
-**Team League**:  ${player.teamLeague}\n
-**Hero League**:  ${player.heroLeague}\n
-**Quick Match**:  ${player.quickMatch}\n
-**Unranked Draft**:  ${player.unrankedDraft}`)
-    })
-  } // mmr
-  
+        {embed: {
+          color: 3447003,
+          title: `Hi ${msg.member.username}, here's your MMR:`,
+          fields: [{
+            name: "Team League",
+            value: player.teamLeague
+          }, {
+            name: "Hero League",
+            value: player.heroLeague
+          }, {
+            name: "Quick Match",
+            value: player.quickMatch
+          }, {
+            name: "Unranked Draft",
+            value: player.unrankedDraft
+          }]
+        }
+      })
+    }) // mmr
+  }
   if(msg.content.startsWith('!winrate')) {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
