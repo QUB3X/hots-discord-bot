@@ -172,43 +172,27 @@ bot.on('messageCreate', (msg) => {
       const arg = msg.content.split(" ")
       const howManyHeroes = (arg[1]) ? arg[1] : 3
       var output = "";
-      const embed = {embed: {
-          color: 3447003,
-          author: {
-            name: client.user.username,
-            icon_url: client.user.avatarURL
-          },
-          title: "This is an embed",
-          url: "http://google.com",
-          description: "This is a test embed to showcase what they look like and what they can do.",
-          fields: [{
-              name: "Fields",
-              value: "They can have different fields with small headlines."
-            },
-            {
-              name: "Masked links",
-              value: "You can put [masked links](http://google.com) inside of rich embeds."
-            },
-            {
-              name: "Markdown",
-              value: "You can put all the *usual* **__Markdown__** inside of them."
-            }
-          ],
-          timestamp: new Date(),
-          footer: {
-            icon_url: client.user.avatarURL,
-            text: "© Example"
-          }
-        }
-      }
-      
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+      heroes.sort((a, b) => {
+                
+      })
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
-        output += `${hero.name} - ${hero.winrate}% winrate - ${hero.gamesPlayed} games\n`
+        output += `(${i+1}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
       }
       
-      bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by winrate:\n${output}`)
+      const embed = {embed: {
+          color: 3447003,
+          url: "https://hots-discord-bot.glitch.me/",
+          fields: [{
+              name: msg.member.username + "'s Top Heroes",
+              value: "`" + output + "`",
+          }]
+        }
+      }
+      
+      bot.createMessage(msg.channel.id, embed)
     })
   } // my top heroes
   
