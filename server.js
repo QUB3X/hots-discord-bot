@@ -12,6 +12,7 @@ const db = new sqlite3.Database(dbFile)
 const request = require('request')
 const express = require('express')
 const path = require('path')
+const sanitize = require('sanitize')
 
 const app = express()
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN) // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
@@ -38,6 +39,9 @@ if (!exists) {
 
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
+  
+  msg = sanitize.value(msg, /[a-z]/)
+  
   // dont reply to other bots
   if (msg.author.bot) return
   
@@ -154,6 +158,7 @@ bot.on('messageCreate', (msg) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
     })
   } // games played
+  
   if(msg.content.startsWith('!mytopheroes')) {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
@@ -164,7 +169,7 @@ bot.on('messageCreate', (msg) => {
       const howManyHeroes = (arg[1]) ? arg[1] : 3
       var output = "";
       
-      // PLS MAKE A SORT HALP !!!!! .sort() DOENST WORK ARGHHHH
+      
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
