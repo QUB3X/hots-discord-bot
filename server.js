@@ -11,13 +11,15 @@ const db = new sqlite3.Database(dbFile)
 // add other libs
 const request = require('request')
 const express = require('express')
+const path = require('path')
 
 const app = express()
-//const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
+const bot = new Eris(process.env.DISCORD_BOT_TOKEN) // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
 const URL = process.env.API_URL
 
-app.get('/', (req, res) => res.send("Hi"))
+app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
+app.listen(process.env.PORT);
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
@@ -29,7 +31,7 @@ if (!exists) {
   console.log('New table users created!')
   })
 }
-/**
+
 // bot.on('ready', () => {                                // When the bot is ready
 //     console.log('Ready!');                             // Log "Ready!"
 // })
@@ -263,4 +265,3 @@ function listAllUsers(){
 }
 
 bot.connect(); // Get the bot to connect to Discord
-*/
