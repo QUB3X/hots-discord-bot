@@ -10,10 +10,14 @@ const db = new sqlite3.Database(dbFile)
 
 // add other libs
 const request = require('request')
+const express = require('express')
 
+const app = express()
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN);   // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
 const URL = process.env.API_URL
+
+app.get('/', (req, res) => res.send('hots-discord-bot, v1.0.0, ONLINE'))
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
