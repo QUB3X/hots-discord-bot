@@ -175,8 +175,8 @@ bot.on('messageCreate', (msg) => {
       //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
       heroes.sort((a, b) => {
         
-        let _a = parseFloat(a.winrate)*parseFloat(a.gamesPlayed)
-        let _b = parseFloat(b.winrate)*parseFloat(b.gamesPlayed)
+        let _a = a.winrate*a.gamesPlayed
+        let _b = b.winrate*b.gamesPlayed
         
         if(isNaN(_a)) _a = 0
         if(isNaN(_b)) _b = 0
@@ -192,7 +192,8 @@ bot.on('messageCreate', (msg) => {
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
-        output += `(${i+1}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
+        let num = (i+1 < 10) ? "0" + (i + 1) : i + 1
+        output += `(${num}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
       }
       
       const embed = {embed: {
@@ -221,21 +222,22 @@ bot.on('messageCreate', (msg) => {
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
-        output += `(${i+1}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
+        let num = (i+1 < 10) ? "0" + (i + 1) : i + 1
+        output += `(${num}) ${hero.winrate}% WR   ${hero.name} (${hero.gamesPlayed} Games)\n`
       }
       
       const embed = {embed: {
           color: 3447003,
           url: "https://hots-discord-bot.glitch.me/",
           fields: [{
-              name: msg.member.username + "'s Top Heroes",
+              name: msg.member.username + "'s Mains",
               value: "`" + output + "`",
           }]
         }
       }
       
       
-      bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by games played:\n${output}`)
+      bot.createMessage(msg.channel.id, embed)
     })
   } // player's mains
 }) // end of commands
