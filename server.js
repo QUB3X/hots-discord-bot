@@ -41,9 +41,7 @@ if (!exists) {
 
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
-  
-  msg = sanitize.value(msg, /[a-z]/)
-  
+    
   // dont reply to other bots
   if (msg.author.bot) return
   
@@ -180,7 +178,8 @@ bot.on('messageCreate', (msg) => {
       
       bot.createMessage(msg.channel.id, `${msg.member.username}, here's your top ${howManyHeroes} heroes by winrate:\n${output}`)
     })
-  } // games played
+  } // my top heroes
+  
   if(msg.content.startsWith('!mymains')) {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
