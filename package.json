@@ -1,6 +1,6 @@
 {
   "name": "hots-discord-bot",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -8,6 +8,8 @@
   "dependencies": {
     "sqlite3": "^4.0.0",
     "request": "^2.85.0",
+    "eris": "^0.8.5",
+    "express": "^4.16.3"
   },
   "engines": {
     "node": "8.x"
