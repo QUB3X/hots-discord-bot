@@ -174,7 +174,20 @@ bot.on('messageCreate', (msg) => {
       var output = "";
       //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
       heroes.sort((a, b) => {
-                
+        let a_wr = parseFloat(a.winrate)
+        let a_gp = parseFloat(a.gamesPlayed)
+        let b_wr = parseFloat(b.winrate)
+        let b_gp = parseFloat(b.gamesPlayed)
+        
+        let a = a_wr*a_gp
+        let b = b_wr*b_gp
+        console.log(a + "   " + b)
+        
+        if(a > b_wr*b_gp)
+          return -1
+        else(a_wr*a_gp < b_wr*b_gp)
+          return 1
+        return 0
       })
       
       for (var i = 0; i < howManyHeroes; i++) {
