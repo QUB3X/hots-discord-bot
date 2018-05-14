@@ -255,6 +255,29 @@ bot.on('messageCreate', (msg) => {
       bot.createMessage(msg.channel.id, embed)
     })
   } // player's mains
+  
+  if(msg.content.startsWith('!heroes')) {
+    // Simulate bot typing
+    bot.sendChannelTyping(msg.channel.id)
+    
+    fetchWinrates(msg, (heroes) => {
+      var output = "Hero | Games Played | Games Banned | "
+      for (let hero of heroes) {
+        output += `${hero.name} ${hero.gamesPlayed} ${hero.gamesBanned}\n`
+      }
+      
+      const embed = {embed: {
+          color: 3447003,
+          url: "https://hots-discord-bot.glitch.me/",
+          fields: [{
+              name: msg.member.username + "'s Mains",
+              value: "`" + output + "`",
+          }]
+        }
+      }
+      
+    })
+  }
 }) // end of commands
 
 
