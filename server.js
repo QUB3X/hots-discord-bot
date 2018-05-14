@@ -103,13 +103,13 @@ bot.on('messageCreate', (msg) => {
                         'Replace **<Region>** with the region of the server you play in, choosing between `EU`, `NA` (LUL), `KR`, `CN`'
       )
     }
-  } // register
+  } // !register
   
   if(msg.content.startsWith('!help')) {
     bot.createMessage(msg.channel.id, '👉 Here\'s a list of all available commands:\n' + 
                                       '`!register <BattleTag#1234> <Region>`\n' +
-                                      '`!mmr`\n`!winrate`\n`!timeplayed`\n`!mytopheroes <Quantity | Max 20>`\n`!mymains <Quantity | Max 20>`')
-  } // help
+                                      '`!mmr`\n`!winrate`\n`!timeplayed`\n`!mytopheroes <Quantity | Max 20>`\n`!mymains <Quantity | Max 20>`\n`!heroes`')
+  } // !help
 
   if(msg.content.startsWith('!mmr')) {
 
@@ -135,7 +135,7 @@ bot.on('messageCreate', (msg) => {
           }]
         }
       })
-    }) // mmr
+    }) // !mmr
   }
   if(msg.content.startsWith('!winrate')) {
     // Simulate bot typing
@@ -145,7 +145,7 @@ bot.on('messageCreate', (msg) => {
       player.winrate += (player.winrate > 50) ? "% 😄" : "% 😦"
       bot.createMessage(msg.channel.id, `${msg.member.username}, your winrate is ${player.winrate}!`)
     })
-  } // winrate
+  } // !winrate
   
   if(msg.content.startsWith('!timeplayed')) {
     // Simulate bot typing
@@ -154,7 +154,7 @@ bot.on('messageCreate', (msg) => {
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, you played for ${player.timePlayed}!`)
     })
-  } // time played
+  } // !timeplayed
   
   if(msg.content.startsWith('!mvp')) {
     // Simulate bot typing
@@ -163,7 +163,7 @@ bot.on('messageCreate', (msg) => {
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, you've been MVP in the ${player.MVPrate}% of your games!`)
     })
-  } // mvp
+  } // !mvp
   
   if(msg.content.startsWith('!gamesplayed')) {
     // Simulate bot typing
@@ -172,7 +172,7 @@ bot.on('messageCreate', (msg) => {
     fetchPlayerData(msg, (player) => {
       bot.createMessage(msg.channel.id, `${msg.member.username}, you've played ${player.gamesPlayed} games (probably more)!`)
     })
-  } // games played
+  } // !gamesplayed
   
   /*
     There is this thing called Discord Embed, similar to MD Card.
@@ -223,7 +223,7 @@ bot.on('messageCreate', (msg) => {
       
       bot.createMessage(msg.channel.id, embed)
     })
-  } // my top heroes
+  } // !mytopheroes
   
   if(msg.content.startsWith('!mymains')) {
     // Simulate bot typing
@@ -253,7 +253,7 @@ bot.on('messageCreate', (msg) => {
       
       bot.createMessage(msg.channel.id, embed)
     })
-  } // player's mains
+  } // !mymains
   
   // Heroes winrates
   if(msg.content.startsWith('!heroes')) {
@@ -283,7 +283,8 @@ bot.on('messageCreate', (msg) => {
       bot.createMessage(msg.channel.id, embed)
       
     })
-  }
+  }// !heroes
+  
 }) // end of commands
 
 
