@@ -261,13 +261,25 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     
     fetchWinrates(msg, (data) => {
-      var output = "Hero | Games Played | Games Banned | Winrate (∆)\n"
+      var output = "Hero        | Played | Banned | Winrate (∆)\n"
       
       let bestHeroes = data.heroes.slice(0, 5)
       let worstHeroes = data.heroes.slice(data.heroes.length - 5)
       
       for (let hero of bestHeroes) {
-        output += `${hero.name} | ${hero.gamesPlayed} | ${hero.gamesBanned} | ${hero.winrate} (${hero.deltaWinrate})\n`
+        output += hero.name
+        for(var i = 0; i < 12-hero.name.length; i++) {
+          output+=" "
+        }
+        output += "| " +hero.gamesPlayed
+        for(var i = 0; i < 7-String(hero.gamesPlayed).length; i++) {
+          output+=" "
+        }
+        output += "| " +hero.gamesBanned
+        for(var i = 0; i < 7-String(hero.gamesBanned).length; i++) {
+          output+=" "
+        }
+        output += `| ${hero.winrate}% (${hero.deltaWinrate}%)\n`
       }
       output += "[...]\n"
       for (let hero of worstHeroes) {
