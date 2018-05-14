@@ -261,36 +261,20 @@ bot.on('messageCreate', (msg) => {
     bot.sendChannelTyping(msg.channel.id)
     
     fetchWinrates(msg, (data) => {
-      var output = "Hero        | Played | Banned | Winrate (∆)\n"
+      var output = "Hero        | Played | Banned | Winrate (∆)\n"+"------------+--------+--------+--------------\n"
       
       let bestHeroes = data.heroes.slice(0, 5)
       let worstHeroes = data.heroes.slice(data.heroes.length - 5)
       
-      for (let hero of bestHeroes) {
-        output += hero.name
-        for(var i = 0; i < 12-hero.name.length; i++) {
-          output+=" "
-        }
-        output += "| " +hero.gamesPlayed
-        for(var i = 0; i < 7-String(hero.gamesPlayed).length; i++) {
-          output+=" "
-        }
-        output += "| " +hero.gamesBanned
-        for(var i = 0; i < 7-String(hero.gamesBanned).length; i++) {
-          output+=" "
-        }
-        output += `| ${hero.winrate}% (${hero.deltaWinrate}%)\n`
-      }
-      output += "[...]\n"
-      for (let hero of worstHeroes) {
-        output += `${hero.name} | ${hero.gamesPlayed} | ${hero.gamesBanned} | ${hero.winrate} (${hero.deltaWinrate})\n`
-      }
+      output += makeTableOfHeroes(bestHeroes)
+      output += "...         | ...    | ...    | ...      \n"
+      output += makeTableOfHeroes(worstHeroes)
       
       const embed = {embed: {
           color: 3447003,
           url: "https://hots-discord-bot.glitch.me/",
           fields: [{
-              name: "Heroes Stats",
+              name: "Heroes Stats by Winrate",
               value: "`" + output + "`",
           }]
         }
@@ -367,6 +351,26 @@ function listAllUsers(){
       }
     }
   })
+}
+
+function makeTableOfHeroes(heroes) {
+  var output = ""
+  for (let hero of heroes) {
+    output += hero.name
+    for(var i = 0; i < 12-hero.name.length; i++) {
+      output+=" "
+    }
+    output += "| " +hero.gamesPlayed
+    for(var i = 0; i < 7-String(hero.gamesPlayed).length; i++) {
+      output+=" "
+    }
+    output += "| " +hero.gamesBanned
+    for(var i = 0; i < 7-String(hero.gamesBanned).length; i++) {
+      output+=" "
+    }
+    output += `| ${hero.winrate}% (${hero.deltaWinrate}%)\n`
+  }
+  return output
 }
 
 bot.connect(); // Get the bot to connect to Discord
