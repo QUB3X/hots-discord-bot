@@ -1,7 +1,7 @@
 {
   "name": "hots-discord-bot",
   "version": "0.0.1",
-  "description": "",
+  "description": "This is a bot to help players!",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
