@@ -1,6 +1,7 @@
 {
   "name": "hots-discord-bot",
   "version": "0.0.1",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -11,9 +12,6 @@
     "eris": "^0.8.5",
     "express": "^4.16.3",
     "sanitize": "^2.0.1"
-  },
-  "engines": {
-    "node": "8.x"
   },
   "license": "ISC"
 }
