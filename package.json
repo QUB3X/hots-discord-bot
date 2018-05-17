@@ -1,7 +1,7 @@
 {
   "name": "hots-discord-bot",
   "version": "0.0.1",
-  "description": "This is a bot to help players!",
+  "description": "This bot provides helpful stats to the players of Heroes of the Storm.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
