@@ -13,7 +13,9 @@ A bot that provides infos and stats about the players.
     ```
     P.S.: Generate your token key from [Discord Developer Page](https://discordapp.com/developers/applications)
 
-3)  Run `node server.js`.
+3)  Run `mkdir .data`.
+
+4)  Run `node server.js`.
 
 
 We're using the [Eris](https://npm.im/eris) library to interact with the Discord API.

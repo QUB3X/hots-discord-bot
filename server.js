@@ -15,9 +15,15 @@ const path = require('path')
 const sanitize = require('sanitize')
 
 const app = express()
-const bot = new Eris(process.env.DISCORD_BOT_TOKEN) // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
+const bot = new Eris(process.env.DISCORD_BOT_TOKEN)
+// Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
 const URL = process.env.API_URL
+
+/**
+ * HOW TO ADD BOT TO DISCORD SERVER:
+ * https://discordapp.com/oauth2/authorize?client_id=441938351222685706&scope=bot
+*/
 
 app.use(sanitize.middleware)
 
@@ -38,7 +44,9 @@ if (!exists) {
 // bot.on('ready', () => {                                // When the bot is ready
 //     console.log('Ready!');                             // Log "Ready!"
 // })
-
+bot.on("ready", () => {
+  console.log("Bot ready!")
+})
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
   
@@ -374,4 +382,8 @@ function makeTableOfHeroes(heroes) {
   return output
 }
 
-bot.connect(); // Get the bot to connect to Discord
+try {
+  bot.connect() // Get the bot to connect to Discord
+} catch (err) {
+  console.log("Error running bot.connect(): " + err)
+}
