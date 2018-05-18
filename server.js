@@ -1,3 +1,5 @@
+require('dotenv').load()
+
 // import discord API lib
 const Eris = require('eris')
 
@@ -14,9 +16,11 @@ const express = require('express')
 const path = require('path')
 const sanitize = require('sanitize')
 
-const app = express()
-const bot = new Eris(process.env.DISCORD_BOT_TOKEN)
+//const app = express()
+const bot = new Eris(process.env.DISCORD_BOT_TOKEN )
 // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
+
+console.log(process.env.DISCORD_BOT_TOKEN)
 
 const URL = process.env.API_URL
 
@@ -25,10 +29,17 @@ const URL = process.env.API_URL
  * https://discordapp.com/oauth2/authorize?client_id=441938351222685706&scope=bot
 */
 
-app.use(sanitize.middleware)
+console.log("Is bot ready?")
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
-app.listen(process.env.PORT);
+bot.on("ready", () => {
+  console.log("Bot ready!")
+})
+
+// app.use(sanitize.middleware)
+
+// app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
+// app.listen(process.env.PORT || 80);
+// console.log("Server running on port" 80)
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
@@ -41,12 +52,6 @@ if (!exists) {
   })
 }
 
-// bot.on('ready', () => {                                // When the bot is ready
-//     console.log('Ready!');                             // Log "Ready!"
-// })
-bot.on("ready", () => {
-  console.log("Bot ready!")
-})
 // When a message is created do stuff:
 bot.on('messageCreate', (msg) => {
   

@@ -2,15 +2,20 @@
   "name": "hots-discord-bot",
   "version": "0.0.1",
   "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QUB3X/hots-discord-bot.git"
+  },
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "sqlite3": "^4.0.0",
-    "request": "^2.85.0",
+    "dotenv": "^5.0.1",
     "eris": "^0.8.5",
     "express": "^4.16.3",
-    "sanitize": "^2.0.1"
+    "request": "^2.85.0",
+    "sanitize": "^2.0.1",
+    "sqlite3": "^4.0.0"
   },
   "license": "ISC"
 }
