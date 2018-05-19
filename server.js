@@ -12,7 +12,6 @@ const db = new sqlite3.Database(dbFile)
 
 // add other libs
 const request = require('request')
-const express = require('express')
 const path = require('path')
 const sanitize = require('sanitize')
 
@@ -20,7 +19,7 @@ const sanitize = require('sanitize')
 const bot = new Eris(process.env.DISCORD_BOT_TOKEN )
 // Replace DISCORD_BOT_TOKEN in .env with your bot accounts token
 
-console.log(process.env.DISCORD_BOT_TOKEN)
+//console.log(process.env.DISCORD_BOT_TOKEN) // DEBUG ONLY
 
 const URL = process.env.API_URL
 
@@ -34,12 +33,6 @@ console.log("Is bot ready?")
 bot.on("ready", () => {
   console.log("Bot ready!")
 })
-
-// app.use(sanitize.middleware)
-
-// app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
-// app.listen(process.env.PORT || 80);
-// console.log("Server running on port" 80)
 
 if (!exists) {
   // if ./.data/sqlite.db does not exist, create it, otherwise do stuff
@@ -187,10 +180,6 @@ bot.on('messageCreate', (msg) => {
     })
   } // !gamesplayed
   
-  /*
-    There is this thing called Discord Embed, similar to MD Card.
-  */
-  
   if(msg.content.startsWith('!mytopheroes')) {
     // Simulate bot typing
     bot.sendChannelTyping(msg.channel.id)
@@ -208,9 +197,7 @@ bot.on('messageCreate', (msg) => {
         
         if(isNaN(_a)) _a = 0
         if(isNaN(_b)) _b = 0
-        
-        //console.log(_a + "   " + _b)
-        
+                
         if(_a > _b)
           return -1
         else(_a < _b)
@@ -246,7 +233,7 @@ bot.on('messageCreate', (msg) => {
       const heroes = player.heroes // array
       const arg = msg.content.split(" ")
       const howManyHeroes = (arg[1] && arg[1] <= 20) ? arg[1] : 3 // Max 20, else 3
-      var output = "";
+      var output = ""
       
       for (var i = 0; i < howManyHeroes; i++) {
         let hero = heroes[i]
