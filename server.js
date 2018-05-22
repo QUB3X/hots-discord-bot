@@ -94,7 +94,7 @@ bot.on('messageCreate', (msg) => {
           const hotslogsId = JSON.parse(data).id
 
           db.serialize(() => {
-            db.run(`INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES(${discordId}, ${hotslogsId}, '${battleTag}');`)
+            db.run('INSERT OR REPLACE INTO users (discord_id, hotslogs_id, battle_tag) VALUES (?, ?, ?);', [discordId, hotslogsId, battleTag])
           })
           bot.createMessage(msg.channel.id, 'Great! I\'ve just added your IDs to my database! Now just ask your MMR with `!mmr`')
         } else {
@@ -292,7 +292,7 @@ bot.on('messageCreate', (msg) => {
 // UTILITY /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 function fetchPlayerData(msg, callback) {
-  db.all(`SELECT hotslogs_id id, discord_id discord FROM users WHERE discord_id = ${msg.author.id}`, (err, rows) => {
+  db.all('SELECT hotslogs_id id, discord_id discord FROM users WHERE discord_id = ?', msg.author.id, (err, rows) => {
     if(err) {
       console.log(err)
       bot.createMessage(msg.channel.id, 'Whoops, something went wrong 😢')
